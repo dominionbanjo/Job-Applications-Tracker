@@ -5,31 +5,33 @@ import express from "express";
 import mongoose from "mongoose";
 const app = express();
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
+
+//import
+import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js";
+import { authenticateUser } from "./middleware/authMiddleware.js";
 
 //middlewares
+app.use(cookieParser());
 app.use(express.json());
 
 // routers
 import jobRouter from "./routes/jobRouter.js";
+import authRouter from "./routes/authRouter.js";
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-app.get("/", (req, res) => {
-  res.json({ message: "Ok" });
-});
-
-app.use("/api/v1/jobs", jobRouter);
+//router middleware
+app.use("/api/v1/jobs", authenticateUser, jobRouter);
+app.use("/api/v1/auth", authRouter);
 
 app.use("*", (req, res) => {
   res.status(404).json({ msg: "not found" });
 });
 
-app.use((err, req, res, next) => {
-  console.log(err);
-  res.status(500).json({ msg: "something went wrong" });
-});
+app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 5100;
 
