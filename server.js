@@ -18,14 +18,20 @@ app.use(express.json());
 // routers
 import jobRouter from "./routes/jobRouter.js";
 import authRouter from "./routes/authRouter.js";
+import userRouter from "./routes/userRouter.js";
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+app.get("/api/v1/test", (req, res) => {
+  res.json({ msg: "test route" });
+});
+
 //router middleware
 app.use("/api/v1/jobs", authenticateUser, jobRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/users", userRouter);
 
 app.use("*", (req, res) => {
   res.status(404).json({ msg: "not found" });
