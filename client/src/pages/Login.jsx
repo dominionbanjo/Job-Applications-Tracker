@@ -1,17 +1,46 @@
-import { Link } from "react-router-dom";
+import {
+  Link,
+  Form,
+  redirect,
+  useNavigation,
+  useActionData,
+} from "react-router-dom";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
-import { Logo, FormRow } from "../components";
+import { FormRow, Logo } from "../components";
+import customFetch from "../utils/customFetch";
+import { toast } from "react-toastify";
 
-const Register = () => {
+export const action = async ({ request }) => {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+  // const errors = { msg: "" };
+  // if (data.password.length < 3) {
+  //   errors.msg = "password too short";
+  //   return errors;
+  // }
+  try {
+    await customFetch.post("/auth/login", data);
+    toast.success("Login successful");
+    return redirect("/dashboard");
+  } catch (error) {
+    // errors.msg = error?.response?.data?.msg
+    toast.error(error?.response?.data?.msg);
+    return error;
+  }
+};
+const Login = () => {
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+  // const errors = useActionData()
   return (
     <Wrapper>
-      <form className="form">
+      <Form method="post" className="form">
         <Logo />
         <h4>Login</h4>
         <FormRow type="email" name="email" defaultValue="john@gmail.com" />
-        <FormRow type="password" name="password" defaultValue="secret" />
-        <button type="submit" className="btn btn-block">
-          Submit
+        <FormRow type="password" name="password" defaultValue="secret123" />
+        <button type="submit" className="btn btn-block" disabled={isSubmitting}>
+          {isSubmitting ? "submitting" : "submit"}
         </button>
         <button type="button" className="btn btn-block">
           explore the app
@@ -23,8 +52,8 @@ const Register = () => {
             Register
           </Link>
         </p>
-      </form>
+      </Form>
     </Wrapper>
   );
 };
-export default Register;
+export default Login;
