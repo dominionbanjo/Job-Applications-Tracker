@@ -34,9 +34,9 @@ const DashboardLayout = ({ isDarkThemeEnabled }) => {
     setShowSidebar(!showSidebar);
   };
   const logoutUser = async () => {
-    navigate("/");
     await customFetch.get("auth/logout");
-    toast.success("Logging out");
+    toast.success("Logout successful");
+    navigate("/");
   };
   return (
     <DashboardContext.Provider
