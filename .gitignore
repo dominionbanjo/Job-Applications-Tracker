@@ -12,6 +12,7 @@ node_modules
 dist
 dist-ssr
 *.local
+populate.js
 
 # Editor directories and files
 .vscode/*
