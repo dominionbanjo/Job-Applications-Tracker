@@ -24,12 +24,14 @@ const AllJobsContext = createContext();
 
 const AllJobs = () => {
   const {
-    data: { jobs },
+    data: { jobs, totalJobs, numOfPages, currentPage },
     searchValues,
   } = useLoaderData();
 
   return (
-    <AllJobsContext.Provider value={{ jobs, searchValues }}>
+    <AllJobsContext.Provider
+      value={{ jobs, totalJobs, numOfPages, searchValues, currentPage }}
+    >
       <SearchContainer />
       <JobsContainer />
     </AllJobsContext.Provider>
