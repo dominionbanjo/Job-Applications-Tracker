@@ -7,6 +7,8 @@ const app = express();
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cloudinary from "cloudinary";
+import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -26,6 +28,8 @@ import path from "path";
 //middlewares
 app.use(cookieParser());
 app.use(express.json());
+app.use(helmet());
+app.use(mongoSanitize());
 
 // routers
 import jobRouter from "./routes/jobRouter.js";
