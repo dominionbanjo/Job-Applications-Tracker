@@ -4,7 +4,6 @@ import { redirect, useOutletContext } from "react-router-dom";
 import { Form } from "react-router-dom";
 import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
-import { useDashboardContext } from "./DashboardLayout";
 
 export const action =
   (queryClient) =>
@@ -18,13 +17,13 @@ export const action =
 
     try {
       await customFetch.patch("/users/update-user", formData);
-      queryClient.InvalidateQueries(["user"]);
+      queryClient.invalidateQueries(["user"]);
       toast.success("Profile updated successfully");
       return redirect("/dashboard");
     } catch (error) {
       toast.error(error?.response?.data?.msg);
+      return null;
     }
-    return null;
   };
 
 const Profile = () => {
