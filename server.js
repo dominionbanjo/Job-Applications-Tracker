@@ -28,7 +28,16 @@ import path from "path";
 //middlewares
 app.use(cookieParser());
 app.use(express.json());
-app.use(helmet());
+// app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'", "https://res.cloudinary.com", "data:"],
+      // Add other directives as needed
+    },
+  })
+);
 app.use(mongoSanitize());
 
 // routers
