@@ -4,6 +4,7 @@ import {
   redirect,
   useActionData,
   useNavigate,
+  useNavigation,
 } from "react-router-dom";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
 import { FormRow, Logo, SubmitBtn } from "../components";
@@ -30,6 +31,8 @@ export const action =
 const Login = () => {
   // const errors = useActionData()
   const navigate = useNavigate();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
   const loginDemoUser = async () => {
     const data = {
       email: "test@test.com",
@@ -52,8 +55,13 @@ const Login = () => {
         <FormRow type="password" name="password" defaultValue="" />
         <SubmitBtn />
 
-        <button type="button" className="btn btn-block" onClick={loginDemoUser}>
-          explore the app
+        <button
+          type="button"
+          disabled={isSubmitting}
+          className="btn btn-block"
+          onClick={loginDemoUser}
+        >
+          {isSubmitting ? "submitting" : "explore the app"}
         </button>
         <p>
           Not a member yet?
