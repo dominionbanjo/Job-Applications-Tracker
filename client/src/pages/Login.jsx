@@ -10,6 +10,7 @@ import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
 import { FormRow, Logo, SubmitBtn } from "../components";
 import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 export const action =
   (queryClient) =>
@@ -30,10 +31,12 @@ export const action =
   };
 const Login = () => {
   // const errors = useActionData()
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const isSubmitting = (navigation.state === "submitting") | isLoading;
   const loginDemoUser = async () => {
+    setIsLoading(true);
     const data = {
       email: "test@test.com",
       password: "secret123",
@@ -44,6 +47,8 @@ const Login = () => {
       navigate("/dashboard");
     } catch (error) {
       toast.error(error?.response?.data?.msg);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -57,9 +62,9 @@ const Login = () => {
 
         <button
           type="button"
-          disabled={isSubmitting}
           className="btn btn-block"
           onClick={loginDemoUser}
+          disabled={isSubmitting}
         >
           {isSubmitting ? "submitting" : "explore the app"}
         </button>
